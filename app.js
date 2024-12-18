@@ -6,11 +6,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const productosRoutes = require("./router/productos");
-const carritoRoutes = require("./router/carrito");
+const productosRoutes = require("./app/productos");
+const carritoRoutes = require("./app/carrito");
 
-app.use("./router/productos", productosRoutes);
-app.use("./router/carrito", carritoRoutes);
+app.use("./app/productos", productosRoutes);
+app.use("./app/carrito", carritoRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => {

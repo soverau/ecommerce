@@ -1,10 +1,10 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const router = express.Router();
+const app = express.app();
 
 // Ruta leer los productos
-router.get("/", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : null;
     const productos = await fs.readJson(
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 
 // Ruta obtener producto por id
-router.get("/:pid", async (req, res) => {
+app.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
     const productos = await fs.readJson(
@@ -40,7 +40,7 @@ router.get("/:pid", async (req, res) => {
 });
 
 // Ruta crear nuevo producto
-router.post("/", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     const {
       title,
@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
 });
 
 // Ruta para actualizar un producto
-router.put("/:pid", async (req, res) => {
+app.put("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
     const {
@@ -129,7 +129,7 @@ router.put("/:pid", async (req, res) => {
 });
 
 // Ruta eliminar un producto
-router.delete("/:pid", async (req, res) => {
+app.delete("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
     let productos = await fs.readJson(
@@ -145,4 +145,4 @@ router.delete("/:pid", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = app;

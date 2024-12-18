@@ -1,10 +1,10 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const router = express.Router();
+const app = express.app();
 
 // Ruta crear carrito
-router.post("/", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     const carrito = { id: Date.now().toString(), productos: [] };
     const carritos = await fs.readJson(path.join(__dirname, "../carrito.json"));
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 });
 
 // Ruta obtener productos de carrito
-router.get("/:cid", async (req, res) => {
+app.get("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;
     const carritos = await fs.readJson(path.join(__dirname, "../carrito.json"));
@@ -37,14 +37,12 @@ router.get("/:cid", async (req, res) => {
 });
 
 // Ruta agregar producto a carrito
-router.post("/:cid/product/:pid", async (req, res) => {
+app.post("/:cid/producto/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const { quantity = 1 } = req.body;
 
-    const carritos = await fs.readJson(
-      path.join(__dirname, "../carrrito.json")
-    );
+    const carritos = await fs.readJson(path.join(__dirname, "../carrito.json"));
     const carrito = carritos.find((c) => c.id === cid);
 
     if (!carrito) {
@@ -58,11 +56,11 @@ router.post("/:cid/product/:pid", async (req, res) => {
       carrito.productos.push({ product: pid, quantity });
     }
 
-    await fs.writeJson(path.join(__dirname, "../carrrito.json"), carritos);
+    await fs.writeJson(path.join(__dirname, "../carrito.json"), carritos);
     res.status(200).json(carrito.productos);
   } catch (error) {
     res.status(500).json({ error: "Error al agregar el producto al carrito" });
   }
 });
 
-module.exports = router;
+module.exports = app;
